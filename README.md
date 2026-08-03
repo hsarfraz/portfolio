@@ -4,6 +4,8 @@
 
 # Project description
 
+To access the published version of the report on posit cloud connect please [click here](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/)
+
 
 
 # How to publish a R markdown on cloud connect
@@ -14,3 +16,4 @@ I published my R markdown file on [posit cloud connect](https://connect.posit.cl
 2. Set your working directory to where your R markdown file is saved by running `setwd("INPUT_WORKING_DIRECTORY_HERE")`
 3. Run `rsconnect::writeManifest()`
 4. Your `manifest.json` should be created and will be in the folder that contains your R markdown file
+5. Copy your .rmd file and manifest.json on your github directory and upload your file via github
