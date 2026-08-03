@@ -4,7 +4,7 @@
 
 # Project description
 
-To access the published version of the report on posit cloud connect please [click here](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/)
+To access the published version of the report on posit cloud connect please [click here](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) (use ctrl+click to open link in another tab)
 
 
 
