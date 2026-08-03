@@ -1,0 +1,476 @@
+---
+title:    "COVID-19 and Multiple Sclerosis Dataset"
+author:   "Hussain Sarfraz"
+output: 
+  rmdformats::readthedown
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if(!require(tidyverse)) install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(knitr)) install.packages("knitr", repos = "http://cran.us.r-project.org")
+if(!require(DT)) install.packages("knitr", repos = "http://cran.us.r-project.org")
+if(!require(xfun)) install.packages("xfun", repos = "http://cran.us.r-project.org")
+if(!require(bookdown)) install.packages("bookdown", repos = "http://cran.us.r-project.org")
+if(!require(dplyr)) install.packages("dplyr", repos = "http://cran.us.r-project.org")
+if(!require(readr)) install.packages("dplyr", repos = "http://cran.us.r-project.org")
+
+library(tidyverse)
+library(knitr)
+library(DT)
+library(xfun)
+library(bookdown)
+library(dplyr) #to use piping
+library(readr)
+```
+
+# Abstract 
+
+This study investigated whether age category, sex, and comorbidity status were associated with the presence of COVID-19 symptoms among people with multiple sclerosis (PwMS). A secondary analysis was conducted using data from the COVID-19 and Multiple Sclerosis dataset available through PhysioNet (n = 1,141). Pearson's chi-square tests of independence were used to examine the association between each independent variable and COVID-19 symptom status. No statistically significant associations were identified between age category (p = 0.6998), sex (p = 0.1672), or comorbidity status (p = 0.113) and COVID-19 symptom status. These findings suggest that, within this dataset, age category, sex, and comorbidity status were not significantly associated with the presence of COVID-19 symptoms among PwMS. Further research examining individual COVID-19 symptoms and additional clinical variables may provide a better understanding of factors associated with symptom presentation in this population.
+
+# Introduction
+
+Multiple sclerosis, known as MS, is an autoimmune disease where the immune system attacks myelin, the protective covering surrounding nerve fibers in the central nervous system (Tobin, 2024). People with MS (PwMS) are a group considered to be vulnerable to hospitalisation and death from lower respiratory tract infections (Barzegar et al., 2021). As a result, the rise of COVID-19 in 2020 prompted researchers to examine how COVID-19 affects PwMS. Whether MS and its treatments influence susceptibility to COVID-19 . 
+
+Previous studies have examined the effects of severe COVID in PwMS (Dyczkowska & Kalinowska-Łyszczarz, 2023) , the effect of COVID-19 vaccines in PwMS (Coyle et al., 2021) and how MS doesn’t appear to significantly increase COVID-19 mortality (Barzegar et al., 2021). Although previous studies have investigated COVID-19 in PwMS, further research on the factors associated with COVID-19 symptoms is still needed (Schiavetti et al., 2022). 
+
+This study will investigate the MS and COVID-19 dataset and explore the question “Are age, sex, and comorbidity status associated with the presence of COVID-19 symptoms among PwMS?”. Examining these associations may support data-driven decision making by helping clinicians better understand how COVID-19 symptoms vary across different groups of PwMS. 
+
+
+# Method
+
+## Ethics and Data Access Requirements
+
+A copy of the COVID-19 and MS dataset was accessed through the MSt Healthcare Data Science Github repository which is created by the University of Cambridge Institute of Continuing Education (CambridgeICE-HDS, n.d.). The original dataset is available through physionet, a NIH funded platform that provides free access to clinical data for healthcare research (Khan et al., 2024). The dataset is accessed through the CambridgeICE-HDS Github repository because it can be loaded directly into R without requiring manual file downloads or local file paths, thereby improving the reproducibility of the analytical workflow. 
+
+The dataset did not collect any personally identifiable information (PII) from patients and was de-identified in accordance with HIPAA guidelines to protect patient privacy. The original study received ethical approval from the Ethics Committee of Hasselt University (CME2020/025 AMD3). Since this study involved secondary analysis of an existing de-identified dataset, no additional patient data were collected (Khan et al., 2024).
+
+
+## Dataset Elements and Coverage
+
+The dataset contains information from 1,141 PwMS (Khan et al., 2024) and includes 47 variables describing demographic characteristics, clinical characteristics, COVID-19 symptoms, and comorbidity information. Of the 1,141 participants, 360 had COVID-19 symptoms while 773 didn’t and there were 8 missing values. Clinicians, PwMS, or their representatives inputted data through the COVID-19 and MS Global Data Sharing Initiative via a standardized data-entry tool (Khan et al., 2024). 
+
+The variables analysed in this study were `age_in_cat` (age category), `sex`, `has_comorbidities.1` (presence of comorbidities), `and covid19_has_symptoms` (presence of COVID-19 symptoms). Age, sex, and comorbidity status were treated as the independent variables, while COVID-19 symptom status was the dependent variable. 
+
+
+## Metadata
+
+Table 1 provides an overview of the variables included in the analysis. Variable definitions were obtained from the accompanying data documentation provided with the dataset (Khan et al., 2024).
+
+| Variable | Description   | Type    | 
+| :---       | :---:         | ---:      | 
+| `age_in_cat`   |Patient age grouped into four categories: <18, 18–50, 51–70, and ≥71 years. This dataset contains observations only in the 18–50 and 51–70 categories.   | Categorical Ordinal  |
+| `sex` (male/female)      | Patient's Sex | Categorical Nominal   |
+| `has_comorbidities.1` (yes/no)  | Whether the patient has comorbidities  | Binary Categorical Nominal   | 
+| `covid19_has_symptoms` (yes/no) | Presence of COVID-19 symptoms. Eight observations contained missing values.  | Binary Categorical Nominal    | 
+
+
+## Analytical Methods used on the Data
+
+### Section Table of Contents
+
+1. [Loading and viewing the original dataset](#loading-and-viewing-the-original-dataset)
+2. [Creating a sub dataframe to only include the variables needed in this analysis](#creating-a-sub-dataframe-to-only-include-the-variables-needed-in-this-analysis)
+3. [Converting variables data types](#converting-variables-data-types)
+4. [Checking how many NA values are in each column](#checking-how-many-na-values-are-in-each-column)
+5. [Proportion tables of all variables](#proportion-tables-of-all-variables)
+6. [Generating Contingency Tables](#generating-contingency-tables)
+7. [Chi-square test of independence](#chi-square-test-of-independence)
+
+
+### Loading and viewing the original dataset
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+The dataset was imported directly into R from the CambridgeICE-HDS GitHub repository using the `download.file()` and `read_csv()` functions. This approach allows the dataset to be downloaded automatically when the R Markdown document is knitted, improving the reproducibility of the analytical workflow.
+
+```{r}
+# This section downloads an CSV dataset from GitHub and loads it into R.
+# Since CSV files are binary (not plain text), they must be downloaded
+# locally before being read using read_excel().
+
+#convert github file URL to a raw URL link 
+#(replace 'github.com' with 'raw.githubusercontent.com' and remove '/blob/')
+
+# Original URL link:
+#https://github.com/CambridgeICE-HDS/MSt-Healthcare-Data-Science/blob/f703ae9dbf74876bd87ada24c3e3252634e1fa29/Datasets/COVID-MS/GDSI_OpenDataset_Final.csv
+# Raw URL link:
+# change 'github.com' to 'raw.githubusercontent.com'
+# remove 'blob'
+#https://raw.githubusercontent.com/CambridgeICE-HDS/MSt-Healthcare-Data-Science/main/Datasets/CDV%20dataset/CVD%20dataset.xlsx
+
+file.url <- "https://raw.githubusercontent.com/CambridgeICE-HDS/MSt-Healthcare-Data-Science/f703ae9dbf74876bd87ada24c3e3252634e1fa29/Datasets/COVID-MS/GDSI_OpenDataset_Final.csv"
+
+#creating a temporary file path in our computer to store the CSV file
+tmp <- tempfile(fileext = ".csv")
+
+#downloading the CSV file and storing it in the temporary file path tmp
+#'wb' (write binary) is required for CSV files since they are binary 
+download.file(file.url, tmp)
+
+#reading in the CSV file & specifying the sheet we want 
+df <- read_csv(tmp)
+
+kable(head(df))
+```
+
+### Creating a sub dataframe to only include the variables needed in this analysis
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+A dataframe variable `df_analysis` was created to only include the variables that are required for analysis. The selected variables were `age_in_cat`, `sex`, `has_comorbidities.1` and `covid19_has_symptoms`. Restricting the dataset to the variables used in the analysis simplifies subsequent data processing and reduces the risk of accidentally including unrelated variables.
+
+A list containing the independent variable names was also created to simplify the application of the same analytical procedures to each predictor variable.
+
+```{r}
+#creating the sub dataframe and specifying the variables
+df_analysis <- df %>%
+  select(age_in_cat, sex, has_comorbidities.1, covid19_has_symptoms)
+
+#displaying the dataframe results
+kable(head(df_analysis))
+
+#making a list to store the independent variable names
+independent_variables_list <- list('age_in_cat', 'sex', 'has_comorbidities.1')
+
+```
+
+### Converting variables data types
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+The `age_in_cat` column was converted to a factor with descriptive category labels ("18–50" and "51–70") to improve the readability and interpretation of tables and statistical analyses. 
+
+```{r}
+df_analysis$age_in_cat <- factor(
+  df_analysis$age_in_cat,
+  levels = c(1, 2),
+  labels = c("18–50", "51–70")
+)
+```
+
+### Checking how many NA values are in each column
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+
+Missing values were assessed for each variable to evaluate data completeness before statistical analysis. All the independent variables,Age_in_cat, Sex, has_comorbidities.1, had zero NA values. The dependent variable, `covid19_has_symptoms` , had 8 NA values. No data exclusion or imputation steps were used on `covid19_has_symptoms` since there were only 8 NA values. Observations with missing values for `covid19_has_symptoms` were excluded from the relevant statistical analyses.
+
+```{r}
+#creating a dataframe that stores the NA counts and percentages for each column
+na_summary <- data.frame(
+  Variable = names(df_analysis),
+  Missing_Count = colSums(is.na(df_analysis)),
+  Missing_Percentage = round(
+    colSums(is.na(df_analysis)) / nrow(df_analysis) * 100,
+    1
+  )
+)
+
+#reversing the order of the missing_count column from highest to lowest
+na_summary <- na_summary %>%
+  arrange(desc(Missing_Count))
+
+#displaying the NA values of all variables from highest to lowest order
+kable(
+  na_summary,
+  caption = "Missing values for variables included in the analysis"
+)
+
+```
+
+### Proportion tables of all variables
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+Proportion tables were generated for each variable to summarise the distribution of participants across categories. These descriptive statistics provide an overview of the analysis cohort and allow the frequency of each category to be examined before conducting inferential statistical analyses. The proportion tables of the independent variables were created in a for loop through the `independent_variables_list` which was created earlier while the proportion table for the dependent variable was created separately. 
+
+```{r results='asis'}
+#using a for loop to create proportion tables for all the independent variables in the `variable` list created earlier 
+for (variable in independent_variables_list) {
+
+  freq <- table(df_analysis[[variable]])
+
+  freq_table <- data.frame(
+    Category = names(freq),
+    Count = as.vector(freq),
+    Percentage = round(as.vector(prop.table(freq)) * 100, 2)
+  )
+
+
+print(kable(caption = paste0("Proportion Table of ", variable),
+            freq_table))
+
+  cat("\n")
+}
+
+#percentage distribution of categorical nominal variable, covid19_has_symptoms 
+
+
+kable(
+   caption = "Propotion table of covid19_has_symptoms",
+  data.frame(
+    Category = names(table(df_analysis$covid19_has_symptoms)),
+    Count = as.vector(table(df_analysis$covid19_has_symptoms)),
+    Percentage = round(as.vector(prop.table(table(df_analysis$covid19_has_symptoms))) * 100, 2)
+  )
+)
+```
+
+### Generating Contingency Tables
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+Contingency Tables were generated to get a deeper insight on how the distribution of the dependent variable across categories of each independent variable. These tables provide the observed frequencies for each combination of categories and form the basis of the Pearson's chi-square tests of independence. 
+
+```{r results='asis'}
+
+#using a for loop to generate contingency tables of the variables age_in_cat, sex, and has_comorbidities.1
+
+for (variable in independent_variables_list) {
+
+  contingency_table <- table(
+    df_analysis[[variable]],
+    df_analysis$covid19_has_symptoms
+  )
+
+  print(kable(caption = paste0("Contingency tables of ", variable, " and COVID-19 Symptom Status"), 
+              contingency_table))
+
+  cat("\n")
+}
+
+```
+
+### Chi-square test of independence
+
+* [Click here to go back to the "Analytical Methods used on the Data" Table of Contents](#section-table-of-contents)
+
+A Pearson's chi-square test of independence was selected because both the independent and dependent variables were categorical. The chi-squared statistical tests examined whether there is any evidence of an association between the independent and dependent variables. Statistical significance was assessed using a significance level of α = 0.05.
+
+```{r}
+
+#chi square test of categorical ordinal variable, age_in_cat 
+#chi square test of categorical nominal variable, sex
+#chi square test of categorical nominal variable, has_comorbidities.1
+
+for (variable in independent_variables_list) {
+  cat("----------\nVariable:", variable, "\n----------")
+  
+  print(
+chisq.test(table(df_analysis[[variable]],
+                 df_analysis$covid19_has_symptoms)) )
+  
+  cat("\n")
+}
+
+```
+
+# Results
+
+The results of the proportions tables, contingency tables, and Pearsons chi-squared tests are summarized below:
+
+The proportions table showed that:
+
+* The majority of participants (77.39%) were aged 18–50 years
+* Most participants (79.23%) were female
+* Most participants (71.25%) didn’t have comorbidities 
+* Most participants (68.23%) didn’t have COVID-19 symptoms
+
+The contingency tables showed that:
+
+* The proportions of participants reporting COVID-19 symptoms was similar across the two age groups 
+* A slightly higher proportion of females reported COVID-19 symptoms than males.
+* Participants with comorbidities showed a slightly higher proportion of COVID-19 symptoms than those without comorbidities. 
+
+Lastly, the Pearson's chi-squared tests found no statistically significant association between age category and COVID-19 symptom status (p = 0.6998), between sex and COVID-19 symptom status (p = 0.1672), or between comorbidity status and COVID-19 symptom status (p = 0.113).
+
+## Bar charts to illustrate proportions table findings
+
+Bar charts were created to visualise the distribution of participants across each variable category. These plots provide a graphical summary of the analysis cohort and complement the proportion tables presented earlier.
+
+The bar charts showed that most participants were aged 18–50 years (77.39%) and that females represented the majority of the study population (79.23%). In addition, most participants reported no comorbidities (71.25%) and no COVID-19 symptoms (68.23%).
+
+```{r}
+#counts bar chart of categorical ordinal variable, age_in_cat
+
+
+ggplot(df_analysis, aes(x = age_in_cat)) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Age Groups",
+    x = "Age Group",
+    y = "Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+
+#counts bar chart of categorical nominal variable, sex
+ggplot(df_analysis, aes(x = factor(sex))) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Gender",
+    x = "Gender",
+    y = "Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+
+#counts bar chart of categorical nominal variable, has_comorbidities.1
+ggplot(df_analysis, aes(x = factor(has_comorbidities.1))) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Comorbidities",
+    x = "Has Comorbidities",
+    y = "Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+
+#counts bar chart of categorical nominal variable, covid19_has_symptoms
+ggplot(df_analysis, aes(x = factor(covid19_has_symptoms))) +
+  geom_bar() +
+  labs(
+    title = "Distribution of COVID-19 Symptoms",
+    x = "Indication of COVID-19 Symptoms",
+    y = "Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+```
+
+## Bar charts to illustrate contingency table findings
+
+Stacked proportional bar charts were created to illustrate the distribution of COVID-19 symptom status within each category of the independent variables. These visualizations complement the chi-square results by visually comparing proportions. If a strong association existed, substantial differences in the proportions of symptomatic and asymptomatic individuals would be expected across categories. However, the proportions appeared similar across age groups, sex categories, and comorbidity groups, which was consistent with the findings of the Pearson's chi-square tests..
+
+```{r}
+#proportions bar chart of categorical ordinal variable, age_in_cat 
+ggplot(df_analysis,
+       aes(x = age_in_cat,
+           fill = covid19_has_symptoms)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Proportion of COVID-19 Symptom Status by Age Group",
+    x = "Age Group",
+    y = "Proportion"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+
+#proportions bar chart of categorical nominal variable, sex
+ggplot(df_analysis,
+       aes(x = factor(sex),
+           fill = covid19_has_symptoms)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Proportion of COVID-19 Symptom Status by Gender",
+    x = "Gender",
+    y = "Proportion"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+
+#proportions bar chart of categorical nominal variable, has_comorbidities.1
+ggplot(df_analysis,
+       aes(x = factor(has_comorbidities.1),
+           fill = covid19_has_symptoms)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Proportion of COVID-19 Symptom Status by Comorbidities",
+    x = "Has Comorbidities",
+    y = "Proportion"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5) #to center the title
+  )
+```
+
+# Discussion
+
+## What did the study find?
+
+This study examined whether age, sex, and comorbidity status were associated with the presence of COVID-19 symptoms among PwMS. The study population mainly consisted of participants who were aged 18-50, female, and didn’t have comorbidities. The Pearson's Chi-squared tests revealed no statistically significant associations between age, sex, or comorbidity status and COVID-19 symptom status.
+
+## Comparison with previous studies
+
+Previous studies have reported that older age, male sex, higher disability status, and some disease-modifying therapies are associated with more severe COVID-19 outcomes in PwMS rather than the presence of COVID-19 symptoms. These studies therefore investigated a different clinical outcome and cannot be directly compared with the present findings (Dyczkowska & Kalinowska-Łyszczarz, 2023).
+
+Similarly, another study reported that recent corticosteroid use and anti-CD20 therapies were associated with more severe COVID-19 disease in PwMS. However, the study did not investigate whether demographic characteristics were associated with the presence or absence of COVID-19 symptoms (Ghadiri et al., 2022).
+
+Among the studies reviewed, only one examined factors associated with COVID-19 symptoms rather than disease severity. It reported that older age was associated with a lower frequency of anosmia and ageusia, males were less likely to develop some symptom groups, and the presence of comorbidities was associated with respiratory symptoms such as shortness of breath, tachycardia, and chest pain. Unlike the present study, which classified symptom status as a simple yes/no outcome, this study analysed individual symptom groups separately, making direct comparison difficult (Schiavetti et al., 2022). 
+
+## Possible explainations for findings
+
+There are many explanations which could explain why this study showed that age, sex, and comorbidity status has no association with COVID-19 symptom status. 
+
+One possible explanation is that the outcome variable only classified participants according to whether they reported COVID-19 symptoms (yes/no), rather than examining individual symptoms separately. Previous research has shown that patient characteristics such as age, sex, and comorbidity status may be associated with specific COVID-19 symptoms rather than overall symptom status. Therefore, analysing symptoms individually may reveal associations that are not apparent when symptoms are combined into a single binary outcome. 
+
+Another possible explanation is the distribution of participants within the dataset. Most participants were aged 18–50 years, were female, did not have comorbidities, and did not report COVID-19 symptoms. This imbalance across categories may have reduced the statistical power to detect differences between groups.
+
+## Study Strengths 
+
+One strength of this study is the relatively large sample size (n = 1,141), which provides a substantial amount of data for statistical analysis. Another strength is the high level of data completeness, with no missing values in the independent variables and only eight missing observations for the dependent variable.
+
+## Study Limitations
+
+This study has several limitations. First, the dependent variable only recorded whether participants experienced COVID-19 symptoms rather than the specific symptoms experienced, limiting the ability to identify associations with individual symptoms. Second, the study relied on secondary data, meaning that the available variables were restricted to those collected in the original dataset. Finally, the observational nature of the dataset means that the findings demonstrate associations rather than causal relationships. 
+
+## Suggestions for future research
+
+Future studies could use datasets with more balanced participant characteristics where possible and investigate individual COVID-19 symptoms separately to determine whether associations differ across symptom types. 
+
+
+# Conclusion
+
+This study investigated whether age category, sex, and comorbidity status were associated with the presence of COVID-19 symptoms among people with multiple sclerosis (PwMS). Pearson's chi-square tests found no statistically significant evidence of an association between any of the three variables and COVID-19 symptom status in this dataset.
+
+These findings suggest that, within this study population, age category, sex, and comorbidity status were not associated with whether participants reported COVID-19 symptoms. However, because the analysis was limited to a small number of variables and classified symptom status as a simple yes/no outcome, additional research is needed to investigate whether individual COVID-19 symptoms or other clinical factors are associated with symptom presentation among PwMS.
+
+
+# References
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Barzegar, M. et al. (2021) ‘Covid-19 among patients with multiple sclerosis’, Neurology Neuroimmunology &amp; Neuroinflammation, 8(4). doi:10.1212/nxi.0000000000001001.
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+CambridgeICE-HDS (n.d.) <i>MSt Healthcare Data Science Datasets</i> [online]. Github. Available at: https://github.com/CambridgeICE-HDS/MSt-Healthcare-Data-Science/tree/main/Datasets/CDV%20dataset (Accessed: 23 April 2026).
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Coyle, P.K. et al. (2021) ‘Vaccine considerations for multiple sclerosis in the COVID-19 ERA’, Advances in Therapy, 38(7), pp. 3550–3588. doi:10.1007/s12325-021-01761-3.
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Dyczkowska, K. and Kalinowska-Łyszczarz, A. (2023) ‘Navigating the landscape of covid-19 for multiple sclerosis patients and clinicians’, Neurologia i Neurochirurgia Polska, 57(1), pp. 90–100. doi:10.5603/pjnns.a2023.0004.
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Ghadiri, F. et al. (2022) ‘Characteristics of COVID-19 in patients with multiple sclerosis’, Multiple Sclerosis and Related Disorders, 57, p. 103437. doi:10.1016/j.msard.2021.103437.
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Khan, H., Geys, L., baneke, p., Comi, G., and Peeters, L. (2024) 'Patient-level dataset to study the effect of COVID-19 in people with Multiple Sclerosis' (version 1.0.1), PhysioNet. RRID:SCR_007345. Available at: https://doi.org/10.13026/77ta-1866 
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Tobin, O. (2024a) Multiple sclerosis, Mayo Clinic. Available at: https://www.mayoclinic.org/diseases-conditions/multiple-sclerosis/symptoms-causes/syc-20350269?lt=&p=1 (Accessed: 21 July 2026).
+</p>
+
+<p style="margin-left: 2em; text-indent: -2em;">
+Schiavetti, I. et al. (2022) ‘Signs and symptoms of COVID‐19 in patients with Multiple Sclerosis’, European Journal of Neurology, 29(12), pp. 3728–3736. doi:10.1111/ene.15554.
+</p>
+
+
+
+
+
