@@ -4,7 +4,7 @@
 
 # Project description
 
-To access the published version of the report on posit cloud connect please [click here](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) (use ctrl+click to open the link in another tab)
+**Note:** To access the published version of the report on posit cloud connect please [click here](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) (use ctrl+click to open the link in another tab)
 
 This project investigated whether age category, sex, and comorbidity status were associated with the presence of COVID-19 symptoms among people with multiple sclerosis (PwMS). A secondary analysis was conducted on a publicly available dataset containing 1,141 participants. Pearson's chi-square tests of independence were used to examine the association between each patient characteristic and COVID-19 symptom status (yes/no). No statistically significant associations were identified between age category, sex, comorbidity status, and the presence of COVID-19 symptoms.
 
