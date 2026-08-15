@@ -2,11 +2,4 @@
 
 ## Table of Contents
 
-* [Projects in R](#projects-in-r)
-
-## Projects in R 
-
-| Project Link | Completion Date | Tools | Project Description |
-| --- | --- | --- | --- |
-| [Impact of COVID-19 on people with multiple sclerosis](https://github.com/hsarfraz/R-projects/tree/multiple-sclerosis-and-COVID) | August 2026 | R, R Markdown | This project investigated whether age category, sex, and comorbidity status were associated with the presence of COVID-19 symptoms among people with multiple sclerosis (PwMS). A secondary analysis was conducted on a publicly available dataset containing 1,141 participants. |
-| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 | Row 1, Col 3 |
+**Note:** To access the published version of the report on posit cloud connect please [click here]([https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/](https://01a0031c-28e3-b342-8184-1ac73a363716.share.connect.posit.cloud)) (use ctrl+click to open the link in another tab)
