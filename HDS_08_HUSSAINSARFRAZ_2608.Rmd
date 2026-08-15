@@ -96,7 +96,7 @@ The dataset was imported into R using the `read_excel()` function.
 
 ```{r}
 #loading the dataset via a local working directory
-df <- read_excel('C:/Users/hussainsarfraz/Desktop/micro masters HDS/HDS_08_HUSSAINSARFRAZ_2608/KCH_abdominal_pain_dataset.xlsx')
+df <- readxl::read_excel("KCH_abdominal_pain_dataset.xlsx")
 
 #viewing the first 10 rows of the dataset
 kable(head(df))
