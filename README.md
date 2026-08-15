@@ -4,6 +4,14 @@
 
 * [Projects in R](#projects-in-r)
 
+## Data Engineering
+
+## SQL
+
+## Python
+
+## Tableau
+
 ## Projects in R 
 
 | Project Link | Completion Date | Tools | Project Description |
