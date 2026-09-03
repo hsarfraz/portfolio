@@ -13,9 +13,11 @@
 
 ## Excel
 
+* [Table of Contents](#table-of-contents)
+
 | Project Link | Completion Date | Tools | Project Description | Files  |
 | --- | --- | --- | --- | --- |
-| [Impact of COVID-19 on people with multiple sclerosis](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) | September 2026 | Microsoft Excel |  | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
+| [Impact of COVID-19 on people with multiple sclerosis](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) | September 2026 | Microsoft Excel | Generating a dashboard on microsoft excel to display and analyze the financials of a hypothetical consulting firm. Examined revenue, EBITDA, margins, and profitability of the firm | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
 
 ## Projects in R 
 
