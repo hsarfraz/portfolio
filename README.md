@@ -17,7 +17,7 @@
 
 | Project Link | Completion Date | Tools | Project Description | Files  |
 | --- | --- | --- | --- | --- |
-| [Impact of COVID-19 on people with multiple sclerosis](https://019fc91a-32f4-c30e-96a0-c1bf1a54ac28.share.connect.posit.cloud/) | September 2026 | Microsoft Excel | Generating a dashboard on microsoft excel to display and analyze the financials of a hypothetical consulting firm. Examined revenue, EBITDA, margins, and profitability of the firm | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
+| Consolidating a Consulting Company’s Financial Data | September 2026 | Microsoft Excel | A consulting company lacked a consolidated view of its financial performance across countries, service lines, and consumer types. In this project, I consolidated the company’s financial data and used Excel PivotTables and PivotCharts to analyze revenue, gross profit, EBITDA, and profitability across these dimensions. I created an interactive dashboard containing five visualizations to help identify significant differences and trends in financial performance. | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
 
 ## Projects in R 
 
