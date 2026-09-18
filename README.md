@@ -8,6 +8,9 @@ My task is to create a dashboard in excel which displays the consolidated financ
 
 # Action
 
+<img width="1378" height="654" alt="image" src="https://github.com/user-attachments/assets/4b24c773-b576-486b-bc7e-e6b6c4e82c8d" />
+
+
 I produced a dashboard on excel which contained 5 visualisations. The first visualization displayed the revenue by country through a map. The second visualization compared revenue and EBITDA through the years 2018 to 2027, which can be further filtered with customer and service type. The third visualization displays the profit and EBITDA margin via a pie chart, which can be filtered by consumer, service, and year. The fourth visualization is a bar chart, which compares the revenue, gross profit, and EBITDA across the service types in the dataset. The fifth and final visualization is an EBITDA bridge, which can be filtered by consumer type, service, and year.  
 
 I used the VLOOKUP function to retrieve the gross profit and EBITDA percentage. The INDEX function was used to extract the revenue and within the INDEX function the MATCH function was used to generate indexes to identify the relevant rows and columns. After the VLOOKUP and INDEX functions were used to retrieve the gross profit percentage, EBITDA percentage, and revenue I calculated the gross profit and EBITDA.
