@@ -9,7 +9,7 @@
 
 | Project Link | Completion Date | Tools | Project Description | Files  |
 | --- | --- | --- | --- | --- |
-| Consolidating a Consulting Company’s Financial Data | September 2026 | Microsoft Excel | A consulting company lacked a consolidated view of its financial performance across countries, service lines, and consumer types. In this project, I consolidated the company’s financial data and used Excel PivotTables and PivotCharts to analyze revenue, gross profit, EBITDA, and profitability across these dimensions. I created an interactive dashboard containing five visualizations to help identify significant differences and trends in financial performance. | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
+| Consolidating a Consulting Company’s Financial Data | September 2026 | Microsoft Excel | A consulting company lacked a consolidated view of its financial performance across countries, service lines, and consumer types. In this project, I consolidated the company’s financial data and used Excel PivotTables and PivotCharts to analyze revenue, gross profit, EBITDA, and profitability across these dimensions. I created an interactive dashboard containing five visualizations to help identify significant differences and trends in financial performance. | [link]() |
 
 ## Python
 
@@ -21,7 +21,7 @@
 
 | Project Link | Completion Date | Tools | Project Description | Files  |
 | --- | --- | --- | --- | --- |
-| Consolidating a Consulting Company’s Financial Data | September 2026 | Microsoft Excel | A consulting company lacked a consolidated view of its financial performance across countries, service lines, and consumer types. In this project, I consolidated the company’s financial data and used Excel PivotTables and PivotCharts to analyze revenue, gross profit, EBITDA, and profitability across these dimensions. I created an interactive dashboard containing five visualizations to help identify significant differences and trends in financial performance. | [link](https://github.com/hsarfraz/portfolio/tree/multiple-sclerosis-and-COVID) |
+| Consolidating a Consulting Company’s Financial Data | September 2026 | Microsoft Excel | A consulting company lacked a consolidated view of its financial performance across countries, service lines, and consumer types. In this project, I consolidated the company’s financial data and used Excel PivotTables and PivotCharts to analyze revenue, gross profit, EBITDA, and profitability across these dimensions. I created an interactive dashboard containing five visualizations to help identify significant differences and trends in financial performance. | [link](https://github.com/hsarfraz/portfolio/tree/consulting-firm-financial-performance-analysis) |
 
 ## Projects in R 
 
